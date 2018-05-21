@@ -62,3 +62,8 @@ test('totalLikes is called', () => {
     const result = listHelper.totalLikes(listOfBlogs)
     expect(result).toBe(36)
 })
+
+test('favorite blog', () => {
+    const result = listHelper.favoriteBlog(listOfBlogs)
+    expect(result).toEqual(listOfBlogs[2])
+})
