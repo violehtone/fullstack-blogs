@@ -37,7 +37,7 @@ test('blogs are returned as json', async () => {
 
 test('adding a blog', async () => {
     const newBlog = {
-        title: "dsada",
+        title: "dsadsa",
         author: "gfdgdf",
         url: "https://3",
         likes: 15

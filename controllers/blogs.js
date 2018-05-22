@@ -4,7 +4,7 @@ const Blog = require('../models/blog')
 const formatBlog = (blog) => {
     return {
         id: blog._id,
-        title: blog.content,
+        title: blog.title,
         author: blog.author,
         url: blog.url,
         likes: blog.likes
@@ -28,7 +28,7 @@ blogsRouter.post('/', async (request, response) => {
 
         const blog = new Blog({
             id: body._id,
-            title: body.content,
+            title: body.title,
             author: body.author,
             url: body.url,
             likes: body.likes === undefined ? 0 : body.likes
