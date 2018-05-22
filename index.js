@@ -5,15 +5,26 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const blogsRouter = require('./controllers/blogs')
+const config = require('./utils/config')
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use('/api/blogs', blogsRouter)
 
-const mongoUrl = 'mongodb://violehtone:olio1@ds227740.mlab.com:27740/violehtone-blogs'
-mongoose.connect(mongoUrl)
+mongoose
+  .connect(config.mongoUrl)
+  .then( () => {
+    console.log('connected to database', config.mongoUrl)
+  })
+  .catch( err => {
+    console.log(err)
+  })
 
-const PORT = 3003
+const PORT = config.port
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+module.exports = {
+  app
+}
