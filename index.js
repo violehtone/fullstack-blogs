@@ -7,24 +7,23 @@ const mongoose = require('mongoose')
 const blogsRouter = require('./controllers/blogs')
 const config = require('./utils/config')
 
+mongoose.connect(config.mongoUrl)
+mongoose.Promise = global.Promise
+
 app.use(cors())
 app.use(bodyParser.json())
 app.use('/api/blogs', blogsRouter)
 
-mongoose
-  .connect(config.mongoUrl)
-  .then( () => {
-    console.log('connected to database', config.mongoUrl)
-  })
-  .catch( err => {
-    console.log(err)
-  })
+const server = http.createServer(app)
 
-const PORT = config.port
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+server.listen(config.port, () => {
+  console.log(`Server running on port ${config.port}`)
+})
+
+server.on('close', () => {
+  mongoose.connection.close()
 })
 
 module.exports = {
-  app
+  app, server
 }
