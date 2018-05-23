@@ -50,6 +50,25 @@ describe.only('when there is one user at db', async () => {
         const usersAfterOperation = await usersInDb()
         expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
     })
+
+    test('POST fails if password is less than 2 characters long', async () => {
+        const usersBeforeOperation = await usersInDb()
+        const newUser = {
+            username: 'vlehtone',
+            name: 'Ville Lehtonen',
+            password: 'a',
+            adult: true
+        }
+        const result = await api
+         .post('/api/users')
+         .send(newUser)
+         .expect(400)
+         .expect('Content-Type', /application\/json/)
+
+        expect(result.body).toEqual({ error: 'password must be at least 3 characters long'})
+        const usersAfterOperation = await usersInDb()
+        expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
+    })
 })
 
 
