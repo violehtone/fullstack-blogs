@@ -13,7 +13,7 @@ const formatBlog = (blog) => {
 
 blogsRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({})
-    response.json(blogs.map(formatBlog))
+    response.json(blogs.map(Blog.format))
   })
 
 blogsRouter.post('/', async (request, response) => {
@@ -35,7 +35,7 @@ blogsRouter.post('/', async (request, response) => {
         })
 
         const savedBlog = await blog.save()
-        response.json(formatBlog(blog))
+        response.json(Blog.format(blog))
 
     }catch (exception){
         console.log(exception)

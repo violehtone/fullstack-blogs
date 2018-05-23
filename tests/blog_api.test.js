@@ -2,7 +2,56 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { format, testBlogs, nonExistingId, blogsInDb } = require('../utils/test_helper')
+const User = require('../models/user')
+const { format, testBlogs, nonExistingId, blogsInDb, usersInDb } = require('../utils/test_helper')
+
+describe.only('when there is one user at db', async () => {
+    beforeAll(async () => {
+        await User.remove({})
+        const user = new User({ username: 'root', password: 'sekret'})
+        await user.save()
+    })
+
+    test(('POST succeeds with a fresh username', async () => {
+        const usersBeforeOperation = await usersInDb()
+        const newUser = {
+            username: 'vlehtone',
+            name: 'Ville Lehtonen',
+            password: 'salainen',
+            adult: true
+        }
+        await api
+         .post('/api/users')
+         .send(newUser)
+         .expect(200)
+         .expect('Content-Type', /application\/json/)
+
+         const usersAfterOperation = await usersInDb
+         expect(usersAfterOperation.length).toBe(usersBeforeOperation.length + 1)
+         const usernames = usersAfterOperation.map(u => u.username)
+         expect(usernames).toContain(newUser.username)
+    }))
+
+    test('POST fails if username is already taken', async () => {
+        const usersBeforeOperation = await usersInDb()
+        const newUser = {
+            username: 'root',
+            name: 'Ville Lehtonen',
+            password: 'salainen',
+            adult: true
+        }
+        const result = await api
+         .post('/api/users')
+         .send(newUser)
+         .expect(400)
+         .expect('Content-Type', /application\/json/)
+
+        expect(result.body).toEqual({ error: 'username must be unique'})
+        const usersAfterOperation = await usersInDb()
+        expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
+    })
+})
+
 
 describe('when there are some blogs saved', async () => {
 
