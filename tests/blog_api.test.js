@@ -27,8 +27,6 @@ describe('when there are some blogs saved', async () => {
             expect(returnedTitles).toContain(blog.title)
         })
     })
-
-
 })
 
 describe('adding a new blog', async () => {
@@ -72,7 +70,6 @@ describe('adding a new blog', async () => {
         const titles = blogsAfterOperation.map(r => r.title)
         expect(blogsAfterOperation.length).toBe(blogsAtStart.length)
     })
-
 })
 
 afterAll(() => {
