@@ -1,6 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../modesls/user')
+const User = require('../models/user')
 
 const formatBlog = (blog) => {
     return {
