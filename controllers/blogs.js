@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../modesls/user')
 
 const formatBlog = (blog) => {
     return {
@@ -7,12 +8,15 @@ const formatBlog = (blog) => {
         title: blog.title,
         author: blog.author,
         url: blog.url,
-        likes: blog.likes
+        likes: blog.likes,
+        user: blog.user
     }
 }
 
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({})
+    const blogs = await Blog
+        .find({})
+        .populate('user', { username: 1, name: 1, adult: 1 })
     response.json(blogs.map(Blog.format))
   })
 
@@ -31,7 +35,8 @@ blogsRouter.post('/', async (request, response) => {
             title: body.title,
             author: body.author,
             url: body.url,
-            likes: body.likes === undefined ? 0 : body.likes
+            likes: body.likes === undefined ? 0 : body.likes,
+            user: "5b055470b5ea10bc611bcb8b"
         })
 
         const savedBlog = await blog.save()
