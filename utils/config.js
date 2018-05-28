@@ -14,7 +14,3 @@ module.exports = {
     mongoUrl,
     port
 }
-
-
-
-// const mongoUrl = 'mongodb://violehtone:olio1@ds227740.mlab.com:27740/violehtone-blogs'

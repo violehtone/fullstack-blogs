@@ -53,7 +53,7 @@ blogsRouter.post('/', async (request, response) => {
 
     try {
         const token = getTokenFrom(request)
-        const decodedToken = jew.verify(token, process.env.SECRET)
+        const decodedToken = jwt.verify(token, process.env.SECRET)
 
         if (!token || !decodedToken.id) {
             return response.status(401).json({ error: 'token missing or invalid' })
@@ -75,7 +75,7 @@ blogsRouter.post('/', async (request, response) => {
         })
 
         const savedBlog = await blog.save()
-        user.blogs = user.blogs.concat(savedNote._id)
+        user.blogs = user.blogs.concat(savedBlog._id)
         await user.save()
         
         response.json(Blog.format(blog))
