@@ -12,10 +12,15 @@ const getTokenFrom = (request) => {
 }
 
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog
-        .find({})
-        .populate('user', { username: 1, name: 1, adult: 1 })
-    response.json(blogs.map(Blog.format))
+    try {
+        const blogs = await Blog
+            .find({})
+            .populate('user', { username: 1, name: 1, adult: 1 })
+        response.json(blogs.map(Blog.format))
+    }catch(exception) {
+        console.log(exception)
+        response.status(500).json({ error: 'something went wrong...' })
+    }
   })
 
 blogsRouter.get('/:id', async (request, response) => {
